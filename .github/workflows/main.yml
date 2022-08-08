@@ -1,19 +1,30 @@
-# name: git actions 이름
-name: Bare Minimum Requirements
-
-# on: 어떤 이벤트가 일어났을 때 아래의 jobs들이 실행될지를 정의.
-on: [push, pull_request]
-
-# jobs: on에서 감지하는 이벤트 발생 시 실행될 내용을 정의.
-# jobs 안에 복수의 job을 정의해서 순차적으로 해당 내용을 실행시킬수도 있다.
+name: Learning GitHub Script
+on:
+  issues:
+    types: [opened]
 jobs:
-  test:
+  comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Bare Minimum Requirements
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16'
-      - run: npm install
-      - run: npm test
+    - name: Comment on new issue
+      uses: actions/github-script@0.8.0
+      with:
+        github-token: {% raw %}${{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}}{% endraw %}
+        script: |
+            github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "🎉 You've created this issue comment using GitHub Script!!!"
+            })
+    - name: Add issue to project board
+      if: contains(github.event.issue.labels.*.name, 'bug')
+      uses: actions/github-script@0.8.0
+      with:
+        github-token: {% raw %}${{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}}{% endraw %}
+        script: |
+            github.projects.createCard({
+            column_id: {{columnID}},
+            content_id: context.payload.issue.id,
+            content_type: "Issue"
+            });
