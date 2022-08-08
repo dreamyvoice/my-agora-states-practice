@@ -1,0 +1,19 @@
+# name: git actions 이름
+name: Bare Minimum Requirements
+
+# on: 어떤 이벤트가 일어났을 때 아래의 jobs들이 실행될지를 정의.
+on: [push, pull_request]
+
+# jobs: on에서 감지하는 이벤트 발생 시 실행될 내용을 정의.
+# jobs 안에 복수의 job을 정의해서 순차적으로 해당 내용을 실행시킬수도 있다.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Bare Minimum Requirements
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - run: npm install
+      - run: npm test
