@@ -9,7 +9,7 @@ jobs:
     - name: Comment on new issue
       uses: actions/github-script@0.8.0
       with:
-        github-token: {% raw %}${{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}}{% endraw %}
+        github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
         script: |
             github.issues.createComment({
             issue_number: context.issue.number,
@@ -21,10 +21,12 @@ jobs:
       if: contains(github.event.issue.labels.*.name, 'bug')
       uses: actions/github-script@0.8.0
       with:
-        github-token: {% raw %}${{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}}{% endraw %}
+        github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
         script: |
             github.projects.createCard({
             column_id: {{columnID}},
             content_id: context.payload.issue.id,
             content_type: "Issue"
             });
+            
+            
